@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+      
+        
+        
+        
+       
+    <style>
+	
+	
+        body{
+            margin: 0;
+            padding: 0;
+        }    
+        .box1{
+            height:100vh;
+            width: 100%;
+            background-image: url(i4.jpg);
+            background-size: cover;
+            display: table;
+            background-attachment: fixed;
+			
+        }
+        .box2{
+            height: 100vh;
+            width: 100%;
+            background-image: url(i5.jpg);
+            background-size: cover;
+            display: table;
+            background-attachment: fixed;
+        }
+        .box3{
+            height: 100vh;
+            width: 100%;
+            background-image: url(i6.jpg);
+            background-size: cover;
+            display: table;
+            background-attachment: fixed;
+        }
+        .heading{
+            font-family: arial black;
+            font-size: 100px;
+            color:rgb(238, 110, 115);
+			color:#2E9285;
+			
+            margin: 0px;
+           	display: table-cell;
+            vertical-align: middle;
+			opacity:0.7;
+			}
+			
+			#map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+     
+      table {
+        font-size: 12px;
+      }
+      #map {
+        width: 100%;
+      }
+      #listing {
+        position: fixed;
+        width: 200px;
+        height: 500px;
+        overflow: auto;
+        right:0;
+        top: 0px;
+        cursor: pointer;
+        overflow-x: hidden;
+	
+		
+      }
+      #findhotels {
+        position: absolute;
+        text-align: right;
+        width: 100px;
+        font-size: 14px;
+        padding: 4px;
+        z-index: 5;
+        background-color: #fff;
+      }
+      #locationField {
+        position: absolute;
+        width: 190px;
+        height: 25px;
+        left: 108px;
+        top: 0px;
+        z-index: 5;
+        background-color: #fff;
+      }
+     
+      #autocomplete {
+        width: 100%;
+      }
+      #country .typeofplace{
+        width: 100%;
+      }
+	  #typeofplace{
+        width: 100%;
+      }
+      .placeIcon {
+        width: 20px;
+        height: 34px;
+        margin: 4px;
+      }
+      .hotelIcon {
+        width: 24px;
+        height: 24px;
+      }
+      #resultsTable {
+        border-collapse: collapse;
+        width: 240px;
+      }
+      #rating {
+        font-size: 13px;
+        font-family: Arial Unicode MS;
+      }
+      .iw_table_row {
+        height: 18px;
+      }
+      .iw_attribute_name {
+        font-weight: bold;
+        text-align: right;
+      }
+      .iw_table_icon {
+        text-align: right;
+      }
+	  .hidden{
+		  display:none;
+	  }
+	  .unhidden{
+		  display:block;
+	  }
+			
+    .inputPoi{
+      position:absolute;
+      width: 30%;
+      left: 50%;
+      top:62%;
+      transform: translate(-50%, -50%);
+     
+      
+    }
+			
+				
+    </style>
+    </head>
+    <body>
+        
+      
+        <div class="img-responsive box1">
+          <!--  <img class="img-responsive" src="i1.jpg">  -->
+           <div class="heading text-center"><span>TripIn</span>
+           <br>
+          
+           <input id="autocomplete" style=" margin-bottom:10px; width:40%" class="form-control center-block"  type="text" placeholder="Enter the name of city..">
+
+            
+            <input class="btn center-block"  id="searchButton" type="submit" value="Search" onclick="loadDoc()">
+           
+		    </div>    
+          
+           
+       </div>
+       
+        <div class="box3 img-responsive">
+            <div id="displaypoilist" style="z-index:100;">
+
+
+            </div>
+  
+        </div>
+<div class="box2 img-responsive">
+  <p style="color:#EFB248; font-size:45px; opacity:0.85; margin: 0px;
+     display: table-cell;
+  vertical-align: middle; font-weight:800;" class=" text-center">We will make your trip best by considering time and season...</p>
+</div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+ function loadDoc() {
+  var baseAddress = "tripin/";
+  var city = document.getElementById("autocomplete").value;
+  baseAddress = baseAddress+city;
+  
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     // document.getElementById("demo").innerHTML = this.responseText;
+     //console.log(this.responseText);
+    }
+  };
+  xhttp.open("GET", baseAddress, true);
+  xhttp.send();
+  console.log("request Sent for city "+ city);
+}
+
+   
+
+
+
+
+      
+ </script>
+
+
+</html>
