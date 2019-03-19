@@ -109,13 +109,15 @@ tripinController.getPoi = function(req, res){
     else{
       console.log("Request Recevied at server for city = " + city);
       load_data(poi);
-    
-
       tsp_ga();
       // JSON.stringify(poi);
       //res.send(JSON.stringify(poi));
-
-      console.log(bestEver);
+      for(var i = 0; i<totalCities;i++){
+        var seqNo = bestEver[i];
+        tspCities[i] = cities[seqNo];
+      }
+      //res.send("Shortest path = "+bestEver+" and distance between selected pois = "+recordDistance+"Km");
+      res.send(tspCities);
     }
   });
 }
@@ -124,8 +126,8 @@ tripinController.getPoi = function(req, res){
 
 // TSP implementation
 
-
-var totalCities;
+var tspCities = [];
+var totalCities = 10;
 var cities = [];
 var popSize = 2000;
 var generations = 50;
@@ -146,7 +148,7 @@ function load_data(selectedPoi){
 var databmt2 = [{"x":18.1899305,"y":74.6157503},{"x":18.176979599999999,"y":74.599074},{"x":18.1903955,"y":74.6161179},{"x":18.1572968,"y":74.58377},{"x":18.156244,"y":74.588865},{"x":18.182435,"y":74.608907},{"x":18.1695028,"y":74.59658059999999},{"x":18.137618400000002,"y":74.56396280000001},{"x":18.157609000000002,"y":74.584103},{"x":18.1568827,"y":74.58244530000001}];
 	
   //totalCities = selectedPoi.length;
-  totalCities = 20;
+ 
 	for(var i = 0; i<totalCities; i++){
         cities[i] = new Vector(selectedPoi[i].geometry[0].location[0].lat,selectedPoi[i].geometry[0].location[0].lng);
 	}
