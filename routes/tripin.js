@@ -4,7 +4,7 @@ const https = require('https');
 var tripinController = require("../controllers/TripinController.js");
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('tripin/getpoi');
+  res.render('tripin/waypoints');
 });
 
 

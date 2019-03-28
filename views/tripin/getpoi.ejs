@@ -4,11 +4,7 @@
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
        
         <script type="text/javascript" src="js/jquery.min.js"></script>
-      
-        
-        
-        
-       
+ 
     <style>
 	
 	
@@ -56,98 +52,11 @@
 			#map {
         height: 100%;
       }
-      /* Optional: Makes the sample page fill the window. */
-     
-      table {
-        font-size: 12px;
-      }
-      #map {
-        width: 100%;
-      }
-      #listing {
-        position: fixed;
-        width: 200px;
-        height: 500px;
-        overflow: auto;
-        right:0;
-        top: 0px;
-        cursor: pointer;
-        overflow-x: hidden;
-	
-		
-      }
-      #findhotels {
-        position: absolute;
-        text-align: right;
-        width: 100px;
-        font-size: 14px;
-        padding: 4px;
-        z-index: 5;
-        background-color: #fff;
-      }
-      #locationField {
-        position: absolute;
-        width: 190px;
-        height: 25px;
-        left: 108px;
-        top: 0px;
-        z-index: 5;
-        background-color: #fff;
-      }
-     
+          
       #autocomplete {
         width: 100%;
       }
-      #country .typeofplace{
-        width: 100%;
-      }
-	  #typeofplace{
-        width: 100%;
-      }
-      .placeIcon {
-        width: 20px;
-        height: 34px;
-        margin: 4px;
-      }
-      .hotelIcon {
-        width: 24px;
-        height: 24px;
-      }
-      #resultsTable {
-        border-collapse: collapse;
-        width: 240px;
-      }
-      #rating {
-        font-size: 13px;
-        font-family: Arial Unicode MS;
-      }
-      .iw_table_row {
-        height: 18px;
-      }
-      .iw_attribute_name {
-        font-weight: bold;
-        text-align: right;
-      }
-      .iw_table_icon {
-        text-align: right;
-      }
-	  .hidden{
-		  display:none;
-	  }
-	  .unhidden{
-		  display:block;
-	  }
-			
-    .inputPoi{
-      position:absolute;
-      width: 30%;
-      left: 50%;
-      top:62%;
-      transform: translate(-50%, -50%);
-     
       
-    }
-			
 				
     </style>
     </head>
@@ -197,7 +106,7 @@
 
 
 function mapLocation() {
-  var directionsDisplay;
+ // var directionsDisplay;
   var directionsService = new google.maps.DirectionsService();
   var map;
   function initialize() {
@@ -226,7 +135,7 @@ function mapLocation() {
 	var request = {
 	origin: start,
       destination: end,
-	waypoints:waypts,
+	    waypoints:waypts,
 	 //optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.DRIVING
     };
@@ -257,7 +166,7 @@ var poidata = [];
      //console.log(this.responseText);
      poidata = JSON.parse(this.responseText);
      console.log(poidata);
-    
+   
     }
   };
   xhttp.open("GET", baseAddress, true);
