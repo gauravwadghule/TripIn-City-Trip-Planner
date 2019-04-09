@@ -135,7 +135,7 @@ function mapLocation() {
 	var request = {
 	origin: start,
       destination: end,
-	    waypoints:waypts,
+	waypoints:waypts,
 	 //optimizeWaypoints: true,
       travelMode: google.maps.TravelMode.DRIVING
     };
@@ -166,7 +166,7 @@ var poidata = [];
      //console.log(this.responseText);
      poidata = JSON.parse(this.responseText);
      console.log(poidata);
-   
+    
     }
   };
   xhttp.open("GET", baseAddress, true);

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <title>TripIn</title>
+  <style>
+    .box1 {
+      height: 100vh;
+      width: 100%;
+      background-image: url(i4.jpg);
+      background-size: cover;
+      display: table;
+      background-attachment: fixed;
+
+    }
+
+    .box2 {
+      height: 100vh;
+      width: 100%;
+      background-image: url(i5.jpg);
+      background-size: cover;
+      display: table;
+      background-attachment: fixed;
+    }
+
+    .box3 {
+      height: 100vh;
+      width: 100%;
+      background-image: url(i6.jpg);
+      background-size: cover;
+      display: table;
+      background-attachment: fixed;
+    }
+
+    .heading {
+      font-family: arial black;
+      font-size: 100px;
+      color: rgb(238, 110, 115);
+      color: #2E9285;
+      margin: 0px;
+      display: table-cell;
+      vertical-align: middle;
+      opacity: 0.7;
+    }
+
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 100%;
+      float: left;
+      width: 70%;
+     
+    }
+
+    .placeIcon {
+      width: 20px;
+      height: 34px;
+      margin: 4px;
+    }
+
+    .hotelIcon {
+      width: 24px;
+      height: 24px;
+    }
+
+    #resultsTable {
+      border-collapse: collapse;
+      width: 30%;
+      cursor: pointer;
+    }
+
+    #rating {
+      font-size: 13px;
+      font-family: Arial Unicode MS;
+    }
+
+    .iw_table_row {
+      height: 18px;
+    }
+
+    .iw_attribute_name {
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .iw_table_icon {
+      text-align: right;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .unhidden {
+      display: block;
+    }
+    #lds-ring {
+      display: none;
+  position: absolute;
+  top:50%;
+  left: 50%;
+  margin: -32px 0px 0px -32px;
+  width: 64px;
+  height: 64px;
+  z-index: 100;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 51px;
+  height: 51px;
+  margin: 6px;
+  border: 6px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+  </style>
+</head>
+
+<body>
+  <div id="lds-ring"><div></div><div></div><div></div><div></div></div>
+  <div class="img-responsive box1">
+    <!--  <img class="img-responsive" src="i1.jpg">  -->
+    <div class="heading text-center"><span>TripIn</span>
+      <br>
+      <input id="autocomplete" style=" margin-bottom:10px; width:40%" class="form-control center-block" type="text"
+        placeholder="Enter the name of city..">
+      <input class="btn center-block" id="searchButton" type="submit" value="Search" onclick="loadPoi()">
+    </div>
+  </div>
+  <div class="img-responsive box2">
+    <div id="map"></div>
+    <div id="listing">
+      <table id="resultsTable">
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="display: none">
+    <div id="info-content">
+      <table>
+        <tr id="iw-url-row" class="iw_table_row">
+          <td id="iw-icon" class="iw_table_icon"></td>
+          <td id="iw-url"></td>
+        </tr>
+        <tr id="iw-address-row" class="iw_table_row">
+          <td class="iw_attribute_name">Address:</td>
+          <td id="iw-address"></td>
+        </tr>
+        <tr id="iw-phone-row" class="iw_table_row">
+          <td class="iw_attribute_name">Telephone:</td>
+          <td id="iw-phone"></td>
+        </tr>
+        <tr id="iw-rating-row" class="iw_table_row">
+          <td class="iw_attribute_name">Rating:</td>
+          <td id="iw-rating"></td>
+        </tr>
+        <tr id="iw-website-row" class="iw_table_row">
+          <td class="iw_attribute_name">Website:</td>
+          <td id="iw-website"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</body>
+
+</html>
+<script>
+  var poidata = [];
+  var PathCoordinator = [];
+
+
+  function loadPoi() {
+    var baseAddress = "tripin/";
+    var city = document.getElementById("autocomplete").value;
+    baseAddress = baseAddress + city;
+    var infoWindow;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        // document.getElementById("demo").innerHTML = this.responseText;
+        //console.log(this.responseText);
+        if (this.responseText == "Null") {
+          alert("No data found for " + city);
+        }
+        PathCoordinator = [];
+        poidata = [];
+        poidata = JSON.parse(this.responseText);
+
+        for (var i = 0; i < poidata.length; i++) {
+          PathCoordinator.push(poidata[i].geometry[0].location[0]);
+        }
+        /* var PathCoordinator = "[";
+          for(var i = 0; i<poidata.length;i++){
+              PathCoordinator = PathCoordinator+ JSON.stringify(poidata[i].geometry[0].location[0])+",";
+              }
+            
+            PathCoordinator = PathCoordinator.substring(0,PathCoordinator.length-1)+"]";
+            PathCoordinator=JSON.parse(PathCoordinator);
+            console.log(PathCoordinator);*/
+        initMap();
+
+      }
+    };
+    xhttp.open("GET", baseAddress, true);
+    xhttp.send();
+    document.getElementById("lbs-ring").style.display = block;
+
+    console.log("request Sent for city " + city);
+  }
+
+
+
+
+  //var PathCoordinator =[{"lat":18.1899305,"lng":74.6157503},{"lat":18.1903955,"lng":74.61611789999999},{"lat":18.182435,"lng":74.608907},{"lat":18.1769796,"lng":74.599074},{"lat":18.1695028,"lng":74.5965806},{"lat":18.156244,"lng":74.588865},{"lat":18.157609,"lng":74.584103},{"lat":18.1572968,"lng":74.58377},{"lat":18.1568827,"lng":74.5824453},{"lat":18.1376184,"lng":74.56396280000001}];
+  var MARKER_PATH = 'https://developers.google.com/maps/documentation/javascript/images/marker_green';
+  var flightPath;
+  var map;
+  var markers = [];
+  var places;
+  function initMap() {
+    document.getElementById('map').scrollIntoView({
+      behavior: 'smooth'
+    })
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 5,
+      center: { lat: 18.1899305, lng: 74.6157503 },
+      mapTypeId: 'terrain'
+    });
+
+    places = new google.maps.places.PlacesService(map);
+
+    flightPath = new google.maps.Polyline({
+      path: PathCoordinator,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    drop();
+    addLine();
+
+
+    var latlngbounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < PathCoordinator.length; i++) {
+      latlngbounds.extend(PathCoordinator[i]);
+    }
+    map.fitBounds(latlngbounds);
+
+
+    //declaring infoormation window for the 
+    infoWindow = new google.maps.InfoWindow({
+      content: document.getElementById('info-content')
+    });
+  }
+
+
+
+  function addLine() {
+    flightPath.setMap(map);
+  }
+
+  function removeLine() {
+    flightPath.setMap(null);
+  }
+
+
+
+
+  //drop markers for poi places
+  function drop() {
+    clearMarkers();
+    clearResults();
+    for (var i = 0; i < PathCoordinator.length; i++) {
+      var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+      var markerIcon = MARKER_PATH + markerLetter + '.png';
+      // Use marker animation to drop the icons incrementally on the map.
+      markers[i] = new google.maps.Marker({
+        position: PathCoordinator[i],
+        animation: google.maps.Animation.DROP,
+        icon: markerIcon
+      });
+      markers[i].placeResult = poidata[i];
+      google.maps.event.addListener(markers[i], 'click', showInfoWindow);
+      setTimeout(dropMarker(i), i * 100);
+      addResult(poidata[i], i);
+    }
+  }
+
+  function showInfoWindow() {
+    var marker = this;
+     places.getDetails({placeId: marker.placeResult.place_id},
+           function(place, status) {
+             if (status !== google.maps.places.PlacesServiceStatus.OK) {
+               return;
+             }
+    infoWindow.open(map, marker);
+    buildIWContent(place);
+  });
+}
+
+  function dropMarker(i) {
+    return function () {
+      markers[i].setMap(map);
+    //  buildIWContent(poidata[i]);
+    };
+  }
+
+
+
+  function clearMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    markers = [];
+  }
+
+  function clearResults() {
+        var results = document.getElementById('results');
+        while (results.childNodes[0]) {
+          results.removeChild(results.childNodes[0]);
+        }
+      }
+
+  function buildIWContent(place) {
+    document.getElementById('iw-icon').innerHTML = '<img class="hotelIcon" ' +
+      'src="' + place.icon + '"/>';
+    document.getElementById('iw-url').innerHTML = '<b><a href="' + place.url +
+      '">' + place.name + '</a></b>';
+    document.getElementById('iw-address').textContent = place.vicinity;
+
+    if (place.formatted_phone_number) {
+      document.getElementById('iw-phone-row').style.display = '';
+      document.getElementById('iw-phone').textContent =
+        place.formatted_phone_number;
+    } else {
+      document.getElementById('iw-phone-row').style.display = 'none';
+    }
+
+    // Assign a five-star rating to the hotel, using a black star ('&#10029;')
+    // to indicate the rating the hotel has earned, and a white star ('&#10025;')
+    // for the rating points not achieved.
+    if (place.rating) {
+      var ratingHtml = '';
+      for (var i = 0; i < 5; i++) {
+        if (place.rating < (i + 0.5)) {
+          ratingHtml += '&#10025;';
+        } else {
+          ratingHtml += '&#10029;';
+        }
+        document.getElementById('iw-rating-row').style.display = '';
+        document.getElementById('iw-rating').innerHTML = ratingHtml;
+      }
+    } else {
+      document.getElementById('iw-rating-row').style.display = 'none';
+    }
+
+    // The regexp isolates the first part of the URL (domain plus subdomain)
+    // to give a short URL for displaying in the info window.
+    if (place.website) {
+      var fullUrl = place.website;
+      var website = hostnameRegexp.exec(place.website);
+      if (website === null) {
+        website = 'http://' + place.website + '/';
+        fullUrl = website;
+      }
+      document.getElementById('iw-website-row').style.display = '';
+      document.getElementById('iw-website').textContent = website;
+    } else {
+      document.getElementById('iw-website-row').style.display = 'none';
+    }
+  }
+
+  //Fill the sidebar with titles
+
+  function addResult(result, i) {
+    var results = document.getElementById('results');
+    var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+    var markerIcon = MARKER_PATH + markerLetter + '.png';
+
+    var tr = document.createElement('tr');
+    tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+    tr.onclick = function () {
+      google.maps.event.trigger(markers[i], 'click');
+    };
+
+    var iconTd = document.createElement('td');
+    var nameTd = document.createElement('td');
+    var icon = document.createElement('img');
+    icon.src = markerIcon;
+    icon.setAttribute('class', 'placeIcon');
+    icon.setAttribute('className', 'placeIcon');
+    var name = document.createTextNode(result.name);
+    iconTd.appendChild(icon);
+    nameTd.appendChild(name);
+    tr.appendChild(iconTd);
+    tr.appendChild(nameTd);
+    results.appendChild(tr);
+  }
+
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDklXA8WPeeXhafyx2vj_Umh8nk7if_2K8&libraries=places">
+</script>
