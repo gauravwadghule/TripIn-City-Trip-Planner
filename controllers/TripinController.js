@@ -9,8 +9,9 @@ var tripinController = {};
 tripinController.save = function (req, res) {
 
 
-  var searchQuery = req.param("cityName");
-  searchQuery = "Tourist Places in "+searchQuery;
+  var searchQuery = req.params.cityName;
+  
+  console.log(searchQuery);
   //Search Places by Text Query
   // var searchQuery = "swimming+pool+in+Baramati";
   //https GET request to GoogleMap APi
@@ -112,11 +113,12 @@ var order = [];
 tripinController.getPoi = function (req, res) {
   var city = req.param("cityName");
   //Find Poi containing formatted address ad given
-  Tripin.find({ $and: [{ "formatted_address": { $regex: ".*" + city + ".*" } }, { "rating": { $gt: 4 } }] }).limit(30).exec(function (err, poi) {
+  Tripin.find({ $and: [{ "formatted_address": { $regex: ".*" + city + "*." } }, { "rating": { $gt: 4 } }] }).limit(30).exec(function (err, poi) {
     if (err) {
       console.log("Error:", err);
     }
-    if (poi.length || poi==[]) {
+    if (poi.length) {
+      console.log(poi.length);
       console.log("Request Recevied at server for city = " + city);
       load_data(poi);
       recordDistance = Infinity;
@@ -146,7 +148,7 @@ tripinController.getPoi = function (req, res) {
     }
     else {
       res.send("Null");
-      tripinController.save(req,res);
+     
     }
   });
 }

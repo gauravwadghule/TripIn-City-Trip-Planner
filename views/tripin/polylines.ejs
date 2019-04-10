@@ -9,14 +9,14 @@
   <script type="text/javascript" src="js/jquery.min.js"></script>
   <title>TripIn</title>
   <style>
-    .box1 {
+    #box1 {
       height: 100vh;
       width: 100%;
       background-image: url(i4.jpg);
       background-size: cover;
       display: table;
       background-attachment: fixed;
-
+     
     }
 
     .box2 {
@@ -105,53 +105,59 @@
     .unhidden {
       display: block;
     }
-    #lds-ring {
-      display: none;
+    #spinner {
+  width: 40px;
+  height: 40px;
   position: absolute;
-  top:50%;
   left: 50%;
-  margin: -32px 0px 0px -32px;
-  width: 64px;
-  height: 64px;
-  z-index: 100;
-}
-.lds-ring div {
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  width: 51px;
-  height: 51px;
-  margin: 6px;
-  border: 6px solid #fff;
-  border-radius: 50%;
-  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #fff transparent transparent transparent;
-}
-.lds-ring div:nth-child(1) {
-  animation-delay: -0.45s;
-}
-.lds-ring div:nth-child(2) {
-  animation-delay: -0.3s;
-}
-.lds-ring div:nth-child(3) {
-  animation-delay: -0.15s;
-}
-@keyframes lds-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  top:50%;
+  margin: -20px 0 0 -20px;
+  display: none;
 }
 
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #2E9285;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+ 
+-webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bounce {
+  0%, 100% { 
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% { 
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
 
   </style>
 </head>
 
 <body>
-  <div id="lds-ring"><div></div><div></div><div></div><div></div></div>
-  <div class="img-responsive box1">
+  <div id="spinner">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+  </div>
+  <div class="img-responsive" id="box1">
     <!--  <img class="img-responsive" src="i1.jpg">  -->
     <div class="heading text-center"><span>TripIn</span>
       <br>
@@ -205,6 +211,8 @@
 
 
   function loadPoi() {
+    document.getElementById('box1').style.opacity=0.3;
+    document.getElementById('spinner').style.display="block";
     var baseAddress = "tripin/";
     var city = document.getElementById("autocomplete").value;
     baseAddress = baseAddress + city;
@@ -232,14 +240,16 @@
             PathCoordinator = PathCoordinator.substring(0,PathCoordinator.length-1)+"]";
             PathCoordinator=JSON.parse(PathCoordinator);
             console.log(PathCoordinator);*/
+            document.getElementById('box1').style.opacity=1;
+            document.getElementById('spinner').style.display="none";
         initMap();
-
+        
       }
     };
     xhttp.open("GET", baseAddress, true);
     xhttp.send();
-    document.getElementById("lbs-ring").style.display = block;
-
+    
+    //document.getElementById("lbs-ring").style.display = block;
     console.log("request Sent for city " + city);
   }
 

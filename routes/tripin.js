@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 
 
-router.get('/findPoi/:searchQuery', tripinController.save);
+router.get('/findPoi/:cityName', tripinController.save);
 
 router.get('/:cityName',tripinController.getPoi);
 
